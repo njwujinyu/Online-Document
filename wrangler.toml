@@ -1,0 +1,22 @@
+# 版权声明 (c) 2025 Edi. 保留所有权利。
+# 所有讨论与反馈请使用本仓库 Issues。
+name = "online-document-sync"
+main = "workers/sync-worker.ts"
+compatibility_date = "2024-12-01"
+
+[[kv_namespaces]]
+binding = "DOCS_CACHE"
+id = "5db73b29b5024113b620bba7c6e7479f"
+
+[vars]
+REPO_OWNER = "njwujinyu"
+REPO_NAME = "Online-Document"
+DOCS_DIR = "docs"
+BRANCH = "main"
+ALLOWED_ORIGIN = "https://online-document.pages.dev"
+ADMIN_USERNAME = "admin"
+ ADMIN_PASSWORD_HASH = "__SET_IN_PROD__"
+ SESSION_SECRET = "__SET_IN_PROD__"
+
+[triggers]
+crons = ["0 */2 * * *"]
