@@ -1,5 +1,5 @@
 export const onRequest = async ({ request, env }: { request: Request; env: Record<string, string> }) => {
-  const base = env.VITE_WORKER_BASE_URL || ''
+  const base = env.WORKER_BASE_URL || ''
   if (!base) return new Response('WORKER_URL_NOT_SET', { status: 500 })
   const u = new URL(request.url)
   const sub = u.pathname.replace(/^\/api/, '') || '/'
