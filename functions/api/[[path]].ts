@@ -1,9 +1,9 @@
 export const onRequest = async ({ request, env }: { request: Request; env: Record<string, string> }) => {
-  const base = env.WORKER_BASE_URL || ''
+  const base = (env.WORKER_BASE_URL || '').replace(/[`'\"]/g, '').trim()
   if (!base) return new Response('WORKER_URL_NOT_SET', { status: 500 })
   const u = new URL(request.url)
   const sub = u.pathname.replace(/^\/api/, '') || '/'
-  const target = base + sub + (u.search || '')
+  const target = base.replace(/\/$/, '') + sub + (u.search || '')
   const headers = new Headers(request.headers)
   const init: RequestInit = {
     method: request.method,
