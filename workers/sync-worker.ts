@@ -37,12 +37,17 @@ const ok = (text: string, origin: string) => new Response(text, {
   }
 })
 
-const b64 = (s: string) => atob(s.replace(/\n/g, ''))
+const b64 = (s: string) => {
+  const bin = atob(s.replace(/\n/g, ''))
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new TextDecoder('utf-8').decode(bytes)
+}
 const cleanOrigin = (v: string) => (v || '').replace(/[`'"]/g, '').trim()
 
 async function listDocs(env: Env) {
   const owner = env.REPO_OWNER || 'njwujinyu'
-  const repo = env.REPO_NAME || 'Online-Document'
+  const repo = env.REPO_NAME || 'wepo-Document'
   const branch = env.BRANCH || 'main'
   const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
   const etagKey = 'etag:tree'
@@ -79,7 +84,7 @@ async function listDocs(env: Env) {
 
 async function fetchDoc(path: string, env: Env) {
   const owner = env.REPO_OWNER || 'njwujinyu'
-  const repo = env.REPO_NAME || 'Online-Document'
+  const repo = env.REPO_NAME || 'wepo-Document'
   const branch = env.BRANCH || 'main'
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
   const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
@@ -200,7 +205,7 @@ export default {
       return json(data ? JSON.parse(data) : [], origin)
     }
     if (u.pathname.startsWith('/doc/')) {
-      const key = u.pathname.replace('/doc/', '')
+      const key = decodeURIComponent(u.pathname.replace('/doc/', ''))
       const data = await env.DOCS_CACHE.get(key)
       return data ? json({ path: key, content: data }, origin) : new Response('not found', { status: 404 })
     }

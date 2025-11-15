@@ -14,14 +14,29 @@ export async function getDocs() {
 export async function getDoc(path: string) {
   if (!base) return { path, content: '' }
   const r = await fetch(`${base}/doc/${encodeURIComponent(path)}`)
-  if (!r.ok) return { path, content: '' }
+  if (!r.ok) {
+    const ct = r.headers.get('content-type') || ''
+    if (ct.includes('application/json')) {
+      const d = await r.json().catch(() => ({})) as { error?: string }
+      return { path, content: '', error: d.error || 'DOC_NOT_FOUND' }
+    }
+    const t = await r.text().catch(() => '')
+    return { path, content: '', error: t || 'DOC_NOT_FOUND' }
+  }
   return r.json()
 }
 
-export async function triggerSync() {
-  if (!base) return false
+export async function triggerSync(): Promise<{ ok: boolean, error?: string }> {
+  if (!base) return { ok: false, error: 'NO_BASE_URL' }
   const r = await fetch(`${base}/sync`, { credentials: 'include' })
-  return r.ok
+  if (r.ok) return { ok: true }
+  const ct = r.headers.get('content-type') || ''
+  if (ct.includes('application/json')) {
+    const data = await r.json().catch(() => ({})) as { error?: string }
+    return { ok: false, error: data.error || 'SYNC_FAILED' }
+  }
+  const text = await r.text().catch(() => '')
+  return { ok: false, error: text || 'SYNC_FAILED' }
 }
 
 export async function postLogin(username: string, password: string) {
