@@ -38,6 +38,7 @@ const ok = (text: string, origin: string) => new Response(text, {
 })
 
 const b64 = (s: string) => atob(s.replace(/\n/g, ''))
+const cleanOrigin = (v: string) => (v || '').replace(/[`'"]/g, '').trim()
 
 async function listDocs(env: Env) {
   const owner = env.REPO_OWNER || 'njwujinyu'
@@ -53,6 +54,17 @@ async function listDocs(env: Env) {
   if (prevEtag) headers['if-none-match'] = prevEtag
   const r = await fetch(url, { headers })
   if (r.status === 304) return [] as Array<{ path: string; sha: string }>
+  const ct = r.headers.get('content-type') || ''
+  if (!r.ok) {
+    let msg = ''
+    if (ct.includes('application/json')) {
+      const j = await r.json().catch(() => ({})) as { message?: string }
+      msg = j.message || JSON.stringify(j)
+    } else {
+      msg = await r.text().catch(() => '')
+    }
+    throw new Error(`GITHUB_TREE_ERROR:${r.status}:${msg}`)
+  }
   const data = await r.json() as { tree?: Array<{ path?: string; type?: string; sha?: string }> }
   const et = r.headers.get('etag')
   if (et) await env.DOCS_CACHE.put(etagKey, et)
@@ -71,6 +83,17 @@ async function fetchDoc(path: string, env: Env) {
   headers['x-github-api-version'] = '2022-11-28'
   if (env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()) headers['authorization'] = `Bearer ${env.GITHUB_TOKEN}`
   const r = await fetch(url, { headers })
+  const ct = r.headers.get('content-type') || ''
+  if (!r.ok) {
+    let msg = ''
+    if (ct.includes('application/json')) {
+      const j = await r.json().catch(() => ({})) as { message?: string }
+      msg = j.message || JSON.stringify(j)
+    } else {
+      msg = await r.text().catch(() => '')
+    }
+    throw new Error(`GITHUB_CONTENT_ERROR:${r.status}:${msg}`)
+  }
   const data = await r.json()
   if (!data.content) return ''
   return b64(data.content)
@@ -122,7 +145,7 @@ async function sync(env: Env) {
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const originHeader = req.headers.get('origin') || ''
-    const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+    const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
     if (req.method === 'OPTIONS') return ok('', origin)
     const u = new URL(req.url)
     if (u.pathname === '/login' && req.method === 'POST') {
@@ -182,7 +205,7 @@ function setCookie(name: string, value: string, days = 7) {
 
 async function login(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const body = await req.json().catch(() => ({})) as { username?: string, password?: string }
   const { username = '', password = '' } = body
   const okPwd = env.ADMIN_PASSWORD_HASH ? bcrypt.compareSync(password, env.ADMIN_PASSWORD_HASH) : false
@@ -203,7 +226,7 @@ async function login(req: Request, env: Env) {
 
 async function session(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const id = getCookie(req, 'session')
   if (!id) return json({ authenticated: false }, origin)
   const s = await env.DOCS_CACHE.get(`session:${id}`)
@@ -212,7 +235,7 @@ async function session(req: Request, env: Env) {
 
 async function logout(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const id = getCookie(req, 'session')
   if (id) {
     await env.DOCS_CACHE.delete(`session:${id}`)
