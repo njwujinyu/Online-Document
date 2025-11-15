@@ -2,7 +2,7 @@
 版权声明 (c) 2025 Edi. 保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
-const base = ((import.meta as unknown) as { env?: { VITE_WORKER_BASE_URL?: string } }).env?.VITE_WORKER_BASE_URL || ''
+const base = ((import.meta as unknown) as { env?: { VITE_WORKER_BASE_URL?: string } }).env?.VITE_WORKER_BASE_URL || '/api'
 
 export async function getDocs() {
   if (!base) return []
