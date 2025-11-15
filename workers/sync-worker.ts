@@ -37,24 +37,40 @@ const ok = (text: string, origin: string) => new Response(text, {
   }
 })
 
-const b64 = (s: string) => atob(s)
+const b64 = (s: string) => atob(s.replace(/\n/g, ''))
 
 async function listDocs(env: Env) {
-  const url = `https://api.github.com/repos/${env.REPO_OWNER}/${env.REPO_NAME}/git/trees/${env.BRANCH}?recursive=1`
+  const owner = env.REPO_OWNER || 'njwujinyu'
+  const repo = env.REPO_NAME || 'Online-Document'
+  const branch = env.BRANCH || 'main'
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
   const etagKey = 'etag:tree'
   const prevEtag = await env.DOCS_CACHE.get(etagKey)
-  const r = await fetch(url, { headers: { 'authorization': `Bearer ${env.GITHUB_TOKEN}`, 'accept': 'application/vnd.github+json', ...(prevEtag ? { 'if-none-match': prevEtag } : {}) } })
+  const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
+  headers['user-agent'] = 'online-document-sync'
+  headers['x-github-api-version'] = '2022-11-28'
+  if (env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()) headers['authorization'] = `Bearer ${env.GITHUB_TOKEN}`
+  if (prevEtag) headers['if-none-match'] = prevEtag
+  const r = await fetch(url, { headers })
   if (r.status === 304) return [] as Array<{ path: string; sha: string }>
   const data = await r.json() as { tree?: Array<{ path?: string; type?: string; sha?: string }> }
   const et = r.headers.get('etag')
   if (et) await env.DOCS_CACHE.put(etagKey, et)
-  const items = (data.tree || []).filter((i) => (i.path || '').startsWith(`${env.DOCS_DIR}/`) && i.type === 'blob' && (i.path || '').endsWith('.md'))
+  const docsDir = env.DOCS_DIR || 'docs'
+  const items = (data.tree || []).filter((i) => (i.path || '').startsWith(`${docsDir}/`) && i.type === 'blob' && (i.path || '').endsWith('.md'))
   return items.map((i) => ({ path: String(i.path), sha: String(i.sha) }))
 }
 
 async function fetchDoc(path: string, env: Env) {
-  const url = `https://api.github.com/repos/${env.REPO_OWNER}/${env.REPO_NAME}/contents/${path}?ref=${env.BRANCH}`
-  const r = await fetch(url, { headers: { 'authorization': `Bearer ${env.GITHUB_TOKEN}`, 'accept': 'application/vnd.github+json' } })
+  const owner = env.REPO_OWNER || 'njwujinyu'
+  const repo = env.REPO_NAME || 'Online-Document'
+  const branch = env.BRANCH || 'main'
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
+  const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
+  headers['user-agent'] = 'online-document-sync'
+  headers['x-github-api-version'] = '2022-11-28'
+  if (env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()) headers['authorization'] = `Bearer ${env.GITHUB_TOKEN}`
+  const r = await fetch(url, { headers })
   const data = await r.json()
   if (!data.content) return ''
   return b64(data.content)
@@ -119,8 +135,20 @@ export default {
       return await logout(req, env)
     }
     if (u.pathname === '/sync') {
-      await sync(env)
-      return ok('ok', origin)
+      try {
+        await sync(env)
+        return ok('ok', origin)
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        return new Response(JSON.stringify({ ok: false, error: msg }), {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+            'access-control-allow-origin': origin,
+            'access-control-allow-credentials': 'true'
+          }
+        })
+      }
     }
     if (u.pathname === '/docs') {
       const data = await env.DOCS_CACHE.get('index')
