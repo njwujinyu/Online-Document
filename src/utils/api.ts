@@ -20,7 +20,7 @@ export async function getDoc(path: string) {
 
 export async function triggerSync() {
   if (!base) return false
-  const r = await fetch(`${base}/sync`)
+  const r = await fetch(`${base}/sync`, { credentials: 'include' })
   return r.ok
 }
 

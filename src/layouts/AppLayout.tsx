@@ -39,9 +39,15 @@ const AppLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-surface-100 dark:bg-surface-900">
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col`}>
+      <div
+        className={`${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }} ${
+          sidebarOpen ? 'w-64' : 'w-0 md:w-20'
+        } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col`}
+      >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify之间">
             {sidebarOpen && (
               <h1 className="text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             )}
@@ -91,10 +97,16 @@ const AppLayout: React.FC = () => {
         </div>
       </div>
 
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/40 md:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
       <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
+              <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+                <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
+              </button>
               <button onClick={goBack} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <ArrowLeft className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
