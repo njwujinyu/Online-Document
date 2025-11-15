@@ -198,5 +198,15 @@ body.dark {
 }
 
 .dark .markdown-content blockquote {
-  color: var(--color-surface-300);
+  color: var(--color-surface-400);
+}
+
+/* 隐藏 Edge/IE 的内置密码显示/清除图标，避免与自定义 Eye 图标重叠 */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+/* 统一关闭默认外观以减少不同浏览器的装饰差异 */
+input[type="password"] {
+  appearance: none;
 }
