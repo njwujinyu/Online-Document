@@ -65,6 +65,10 @@ async function listDocs(env: Env) {
     }
     throw new Error(`GITHUB_TREE_ERROR:${r.status}:${msg}`)
   }
+  if (!ct.includes('application/json')) {
+    const txt = await r.text().catch(() => '')
+    throw new Error(`GITHUB_TREE_NON_JSON:${r.status}:${txt}`)
+  }
   const data = await r.json() as { tree?: Array<{ path?: string; type?: string; sha?: string }> }
   const et = r.headers.get('etag')
   if (et) await env.DOCS_CACHE.put(etagKey, et)
@@ -93,6 +97,10 @@ async function fetchDoc(path: string, env: Env) {
       msg = await r.text().catch(() => '')
     }
     throw new Error(`GITHUB_CONTENT_ERROR:${r.status}:${msg}`)
+  }
+  if (!ct.includes('application/json')) {
+    const txt = await r.text().catch(() => '')
+    throw new Error(`GITHUB_CONTENT_NON_JSON:${r.status}:${txt}`)
   }
   const data = await r.json()
   if (!data.content) return ''
@@ -148,6 +156,20 @@ export default {
     const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
     if (req.method === 'OPTIONS') return ok('', origin)
     const u = new URL(req.url)
+    if (u.pathname === '/status') {
+      const info = {
+        token: !!(env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()),
+        repoOwner: !!env.REPO_OWNER,
+        repoName: !!env.REPO_NAME,
+        branch: env.BRANCH || 'main',
+        docsDir: env.DOCS_DIR || 'docs',
+        allowedOrigin: !!env.ALLOWED_ORIGIN,
+        adminUser: !!env.ADMIN_USERNAME,
+        hasAdminHash: !!env.ADMIN_PASSWORD_HASH,
+        hasSessionSecret: !!env.SESSION_SECRET
+      }
+      return json({ ok: true, env: info }, origin)
+    }
     if (u.pathname === '/login' && req.method === 'POST') {
       return await login(req, env)
     }
