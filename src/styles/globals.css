@@ -174,12 +174,12 @@ body.dark {
   color: var(--color-surface-300);
 }
 
-.markdown-content code {
+.markdown-content :not(pre) > code {
   @apply px-1 py-0.5 rounded text-sm;
   background-color: var(--color-surface-200);
 }
 
-.dark .markdown-content code {
+.dark .markdown-content :not(pre) > code {
   background-color: var(--color-surface-700);
 }
 

@@ -10,7 +10,7 @@ id = "5db73b29b5024113b620bba7c6e7479f"
 
 [vars]
 REPO_OWNER = "njwujinyu"
-REPO_NAME = "Online-Document"
+REPO_NAME = "wepo-Document"
 DOCS_DIR = "docs"
 BRANCH = "main"
 ALLOWED_ORIGIN = "https://online-document.pages.dev"

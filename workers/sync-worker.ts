@@ -43,11 +43,11 @@ const b64 = (s: string) => {
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
   return new TextDecoder('utf-8').decode(bytes)
 }
-const cleanOrigin = (v: string) => (v || '').replace(/[`'"]/g, '').trim()
+const cleanOrigin = (v: string) => (v || '').replace(/[`'\"]/g, '').trim()
 
 async function listDocs(env: Env) {
   const owner = env.REPO_OWNER || 'njwujinyu'
-  const repo = env.REPO_NAME || 'wepo-Document'
+  const repo = env.REPO_NAME || 'Online-Document'
   const branch = env.BRANCH || 'main'
   const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
   const etagKey = 'etag:tree'
@@ -84,7 +84,7 @@ async function listDocs(env: Env) {
 
 async function fetchDoc(path: string, env: Env) {
   const owner = env.REPO_OWNER || 'njwujinyu'
-  const repo = env.REPO_NAME || 'wepo-Document'
+  const repo = env.REPO_NAME || 'Online-Document'
   const branch = env.BRANCH || 'main'
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
   const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
