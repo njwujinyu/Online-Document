@@ -136,10 +136,7 @@ const AppLayout: React.FC = () => {
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className={`w-9 h-9 inline-flex items-center justify-center rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 ${sidebarOpen ? 'md:opacity-0 md:pointer-events-none' : 'md:opacity-100'} md:inline-flex`}
-              >
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
               
