@@ -204,7 +204,6 @@ body.dark {
 .dark .markdown-content code[class*="language-"] {
   background-color: var(--color-surface-700);
 }
-
 /* 保留浅色主题的 token 颜色，不在深色模式覆盖 */
 
 .markdown-content blockquote {

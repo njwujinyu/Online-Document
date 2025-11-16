@@ -49,10 +49,10 @@ const AppLayout: React.FC = () => {
   return (
     <div className="flex h-screen bg-surface-100 dark:bg-surface-900">
       <div
-        className={`${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }} ${
-          sidebarOpen ? 'w-64' : 'w-0 md:w-20'
+        className={`$
+          {sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        } $
+          {sidebarOpen ? 'w-64' : 'w-0 md:w-20'}
         } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
       >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
@@ -96,7 +96,7 @@ const AppLayout: React.FC = () => {
                 const inTitle = (it.title || '').toLowerCase().includes(q)
                 const inPath = (it.path || '').toLowerCase().includes(q)
                 const inSummary = (it.summary || '').toLowerCase().includes(q)
-                const inTags = (it.tags || []).some t => t.toLowerCase().includes(q))
+                const inTags = (it.tags || []).some(t => t.toLowerCase().includes(q))
                 return inTitle || inPath || inSummary || inTags
               })
               .map(it => (
@@ -114,7 +114,7 @@ const AppLayout: React.FC = () => {
         </nav>
 
         <div className="p-4 border-t border-surface-200 dark:border-surface-700 space-y-4">
-          <button onClick={toggleDarkMode} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+          <button onClick={toggleDarkMode} className="w-full flex items中心 space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             {sidebarOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
           </button>
