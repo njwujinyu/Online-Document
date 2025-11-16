@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import React from 'react'
@@ -12,6 +12,25 @@ import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-json'
 import 'prismjs/themes/prism.css'
+
+const renderer = new marked.Renderer()
+const slug = (text: string) => (
+  String(text)
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+)
+renderer.heading = (text: string, level: number) => `<h${level} id="${slug(text)}">${text}</h${level}>`
+marked.use({ renderer })
+marked.setOptions({
+  gfm: true,
+  mangle: false,
+  headerIds: false,
+  highlight: (code: string, lang: string) => {
+    const language = Prism.languages[lang as keyof typeof Prism.languages] || Prism.languages.markup
+    return Prism.highlight(code, language, lang || 'markup')
+  }
+})
 
 export default function DocsPage() {
   type DocRes = { path: string; content?: string; error?: string }
@@ -31,12 +50,6 @@ export default function DocsPage() {
           setError(String(d.error))
           setContent('')
         } else {
-          marked.setOptions({
-            highlight: (code: string, lang: string) => {
-              const language = Prism.languages[lang as keyof typeof Prism.languages] || Prism.languages.markup
-              return Prism.highlight(code, language, lang || 'markup')
-            }
-          })
           const html = d.content ? marked.parse(d.content) as string : ''
           const safe = DOMPurify.sanitize(html)
           setContent(safe)
@@ -59,12 +72,6 @@ export default function DocsPage() {
             setError(String(d.error))
             setContent('')
           } else {
-            marked.setOptions({
-              highlight: (code: string, lang: string) => {
-                const language = Prism.languages[lang as keyof typeof Prism.languages] || Prism.languages.markup
-                return Prism.highlight(code, language, lang || 'markup')
-              }
-            })
             const html = d.content ? marked.parse(d.content) as string : ''
             const safe = DOMPurify.sanitize(html)
             setContent(safe)
