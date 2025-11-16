@@ -1,6 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import * as bcrypt from 'bcryptjs'

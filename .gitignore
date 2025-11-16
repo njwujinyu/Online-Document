@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vite/
+.wrangler/
+.mf/
+.env*
+.dev.vars
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+.DS_Store
+.vscode/
+coverage/

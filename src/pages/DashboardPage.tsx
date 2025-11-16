@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import React from 'react'
@@ -22,9 +22,9 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-sm p-8">
+        <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-sm p-8">
               <div className="text-center">
-                <div className="w-20 h-20 bg-primary-100 dark:bg-primary-900/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-primary-100 dark:bg-primary-900/20 rounded-2xl flex items中心 justify-center mx-auto mb-6">
                   <FileText className="w-10 h-10 text-primary-600 dark:text-primary-400" />
                 </div>
                 
@@ -47,7 +47,7 @@ const DashboardPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button onClick={() => navigate('/docs')} className="text-center p-6 bg-surface-50 dark:bg-surface-700 rounded-xl">
-                    <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-xl flex items中心 justify-center mx-auto mb-4">
                       <Folder className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                     <h4 className="font-semibold text-surface-900 dark:text-surface-100 mb-2">
@@ -59,7 +59,7 @@ const DashboardPage: React.FC = () => {
                   </button>
 
                   <div className="text-center p-6 bg-surface-50 dark:bg-surface-700 rounded-xl">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items中心 justify中心 mx-auto mb-4">
+                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items中心 justify-center mx-auto mb-4">
                       <Search className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <h4 className="font-semibold text-surface-900 dark:text-surface-100 mb-2">
@@ -71,7 +71,7 @@ const DashboardPage: React.FC = () => {
                   </div>
 
                   <button onClick={async () => { setSyncMsg('同步中...'); const { ok, error } = await triggerSync(); setSyncMsg(ok ? '同步完成' : `同步失败：${error || ''}`); }} className="text-center p-6 bg-surface-50 dark:bg-surface-700 rounded-xl">
-                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items中心 justify中心 mx-auto mb-4">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items中心 justify-center mx-auto mb-4">
                       <Menu className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                     </div>
                     <h4 className="font-semibold text-surface-900 dark:text-surface-100 mb-2">

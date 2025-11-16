@@ -44,6 +44,8 @@ const AppLayout: React.FC = () => {
     }
   }, [location.pathname, darkMode])
 
+  
+
   const handleLogout = () => {
     logout()
   }
@@ -51,10 +53,10 @@ const AppLayout: React.FC = () => {
   return (
     <div className="flex h-screen bg-surface-100 dark:bg-surface-900">
       <div
-        className={`$
-          {sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        } $
-          {sidebarOpen ? 'w-64' : 'w-0 md:w-20'}
+        className={`${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }} ${
+          sidebarOpen ? 'w-64' : 'w-0 md:w-20'
         } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
       >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">

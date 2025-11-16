@@ -226,9 +226,7 @@ input[type="password"] {
 }
 
 a:focus, button:focus, input:focus, textarea:focus, select:focus { outline: none; }
-
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
-
 .markdown-content pre, .markdown-content code[class*="language-"] { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; }
 .markdown-content code[class*="language-"] .token { background: transparent !important; box-shadow: none !important; text-shadow: none !important; }
 .dark .markdown-content code[class*="language-"] .token { background: transparent !important; box-shadow: none !important; text-shadow: none !important; }
