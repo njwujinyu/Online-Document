@@ -66,7 +66,7 @@ const AppLayout: React.FC = () => {
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           <div className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700">
             <Search className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             {sidebarOpen && (
@@ -96,7 +96,7 @@ const AppLayout: React.FC = () => {
                 const inTitle = (it.title || '').toLowerCase().includes(q)
                 const inPath = (it.path || '').toLowerCase().includes(q)
                 const inSummary = (it.summary || '').toLowerCase().includes(q)
-                const inTags = (it.tags || []).some(t => t.toLowerCase().includes(q))
+                const inTags = (it.tags || []).some t => t.toLowerCase().includes(q))
                 return inTitle || inPath || inSummary || inTags
               })
               .map(it => (

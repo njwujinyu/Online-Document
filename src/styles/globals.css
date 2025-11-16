@@ -192,44 +192,20 @@ body.dark {
   background-color: var(--color-surface-700);
 }
 
+/* 深色模式下为代码高亮提供独立配色与去重影处理 */
 .dark .markdown-content pre,
 .dark .markdown-content code[class*="language-"] {
   text-shadow: none;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  color: #e5e9f0;
+  color: #ffffff;
 }
 .dark .markdown-content pre[class*="language-"],
 .dark .markdown-content code[class*="language-"] {
   background-color: var(--color-surface-700);
 }
 
-.dark .markdown-content .token.comment,
-.dark .markdown-content .token.prolog,
-.dark .markdown-content .token.doctype,
-.dark .markdown-content .token.cdata { color: #7f848e; }
-.dark .markdown-content .token.punctuation { color: #e5e9f0; }
-.dark .markdown-content .token.property,
-.dark .markdown-content .token.tag,
-.dark .markdown-content .token.constant,
-.dark .markdown-content .token.symbol,
-.dark .markdown-content .token.deleted { color: #d08770; }
-.dark .markdown-content .token.boolean,
-.dark .markdown-content .token.number { color: #b48ead; }
-.dark .markdown-content .token.selector,
-.dark .markdown-content .token.attr-name,
-.dark .markdown-content .token.string,
-.dark .markdown-content .token.char,
-.dark .markdown-content .token.builtin,
-.dark .markdown-content .token.inserted { color: #a3be8c; }
-.dark .markdown-content .token.operator,
-.dark .markdown-content .token.entity,
-.dark .markdown-content .token.url { color: #81a1c1; }
-.dark .markdown-content .token.atrule,
-.dark .markdown-content .token.attr-value,
-.dark .markdown-content .token.keyword { color: #88c0d0; }
-.dark .markdown-content .token.function { color: #8fbcbb; }
-.dark .markdown-content .token.variable { color: #d8dee9; }
+/* 保留浅色主题的 token 颜色，不在深色模式覆盖 */
 
 .markdown-content blockquote {
   @apply border-l-4 border-primary-400 pl-4 italic my-4;
