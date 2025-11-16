@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import React, { useState, useEffect } from 'react'
@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading || !username || !password}
-              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text白色 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               {isLoading ? (
                 <>
@@ -114,11 +114,7 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-surface-50 dark:bg-surface-700 rounded-lg">
-            <p className="text-sm text-surface-600 dark:text-surface-400 text-center">
-              测试账号: <strong>admin</strong> / <strong>password</strong>
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>
