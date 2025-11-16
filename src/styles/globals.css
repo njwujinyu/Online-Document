@@ -189,16 +189,21 @@ body.dark {
 }
 
 .dark .markdown-content pre {
-  background-color: var(--color-surface-800);
+  background-color: var(--color-surface-700);
 }
 
-/* 深色模式下为代码高亮提供独立配色与去重影处理 */
 .dark .markdown-content pre,
 .dark .markdown-content code[class*="language-"] {
   text-shadow: none;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
+  color: #e5e9f0;
 }
+.dark .markdown-content pre[class*="language-"],
+.dark .markdown-content code[class*="language-"] {
+  background-color: var(--color-surface-700);
+}
+
 .dark .markdown-content .token.comment,
 .dark .markdown-content .token.prolog,
 .dark .markdown-content .token.doctype,
