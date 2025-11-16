@@ -196,8 +196,8 @@ body.dark {
 .dark .markdown-content pre,
 .dark .markdown-content code[class*="language-"] {
   text-shadow: none;
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: #ffffff;
 }
 .dark .markdown-content pre[class*="language-"],
@@ -224,3 +224,9 @@ input[type="password"]::-ms-clear {
 input[type="password"] {
   appearance: none;
 }
+
+a:focus, button:focus, input:focus, textarea:focus, select:focus { outline: none; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+
+.markdown-content pre, .markdown-content code[class*="language-"] { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; }
