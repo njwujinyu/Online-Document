@@ -118,7 +118,7 @@ const AppLayout: React.FC = () => {
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             {sidebarOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
           </button>
-          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20 text-error-600 dark:text-error-400">
+          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500">
             <LogOut className="w-5 h-5" />
             {sidebarOpen && <span>退出登录</span>}
           </button>
@@ -132,7 +132,7 @@ const AppLayout: React.FC = () => {
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+              <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
               <button onClick={goBack} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
