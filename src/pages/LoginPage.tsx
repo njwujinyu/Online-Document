@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import React, { useState, useEffect } from 'react'
@@ -114,15 +114,9 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-surface-50 dark:bg-surface-700 rounded-lg">
-            <p className="text-sm text-surface-600 dark:text-surface-400 text-center">
-              测试账号: <strong>admin</strong> / <strong>password</strong>
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>
   )
 }
-
-export default LoginPage

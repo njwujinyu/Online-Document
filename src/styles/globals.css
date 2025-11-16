@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 @tailwind base;
@@ -144,7 +144,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark {
+.dark body {
   background-color: var(--color-surface-900);
   color: var(--color-surface-50);
 }
@@ -192,6 +192,7 @@ body.dark {
   background-color: var(--color-surface-700);
 }
 
+/* 深色模式下为代码高亮提供独立配色与去重影处理 */
 .dark .markdown-content pre,
 .dark .markdown-content code[class*="language-"] {
   text-shadow: none;
@@ -203,6 +204,7 @@ body.dark {
 .dark .markdown-content code[class*="language-"] {
   background-color: var(--color-surface-700);
 }
+/* 保留浅色主题的 token 颜色，不在深色模式覆盖 */
 
 .markdown-content blockquote {
   @apply border-l-4 border-primary-400 pl-4 italic my-4;
@@ -213,10 +215,12 @@ body.dark {
   color: var(--color-surface-400);
 }
 
+/* 隐藏 Edge/IE 的内置密码显示/清除图标，避免与自定义 Eye 图标重叠 */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
+/* 统一关闭默认外观以减少不同浏览器的装饰差异 */
 input[type="password"] {
   appearance: none;
 }

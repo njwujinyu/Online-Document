@@ -1,5 +1,5 @@
 /*
-版权声明 (c) 2025 Edi. 保留所有权利。
+版权声明 (c) 2025 作者：Edi。保留所有权利。
 所有讨论与反馈请使用本仓库 Issues。
 */
 import React from 'react'
@@ -38,7 +38,11 @@ const AppLayout: React.FC = () => {
     localStorage.setItem('theme', v ? 'dark' : 'light')
   }
 
-  
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false)
+    }
+  }, [location.pathname, darkMode])
 
   const handleLogout = () => {
     logout()
@@ -124,10 +128,10 @@ const AppLayout: React.FC = () => {
       </div>
 
       {sidebarOpen && (
-        <div className="fixed inset-0 bg黑/40 md:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 z-30 md:hidden" aria-hidden onClick={() => setSidebarOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
-        <header className="bg白 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
+        <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
