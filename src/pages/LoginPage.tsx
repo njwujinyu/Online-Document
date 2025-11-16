@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading || !username || !password}
-              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items中心 justify-center space-x-2"
+              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               {isLoading ? (
                 <>

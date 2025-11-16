@@ -111,7 +111,7 @@ const AppLayout: React.FC = () => {
               ))}
           </div>
 
-          <button onClick={() => navigate('/me')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+          <button onClick={() => navigate('/me')} className="w-full flex items中心 space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             <FileText className="w-5 h-5" />
             {sidebarOpen && <span>我的文档</span>}
           </button>

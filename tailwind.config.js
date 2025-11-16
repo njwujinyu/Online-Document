@@ -46,7 +46,7 @@ export default {
           600: 'var(--color-success-600)',
           700: 'var(--color-success-700)',
           800: 'var(--color-success-800)',
-          900: 'var(--color-success-900)',
+          900': 'var(--color-success-900)',
         },
         warning: {
           DEFAULT: 'var(--color-warning-500)',
