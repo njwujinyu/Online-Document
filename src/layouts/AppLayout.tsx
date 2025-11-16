@@ -53,7 +53,7 @@ const AppLayout: React.FC = () => {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }} ${
           sidebarOpen ? 'w-64' : 'w-0 md:w-20'
-        } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col`}
+        } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
       >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
           <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
