@@ -11,7 +11,7 @@ export default function SearchPage() {
     <div className="min-h-screen bg-surface-50 dark:bg-surface-900 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-sm p-8">
-          <div className="flex items中心 space-x-3 mb-6">
+          <div className="flex items-center space-x-3 mb-6">
             <Search className="w-6 h-6 text-primary-600 dark:text-primary-400" />
             <h2 className="text-xl font-semibold text-surface-900 dark:text-surface-100">搜索文档</h2>
           </div>

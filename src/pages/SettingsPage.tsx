@@ -3,41 +3,41 @@
 所有讨论与反馈请使用本仓库 Issues。
 */
 import { Settings, Moon, Sun } from 'lucide-react'
-import React from 'react'
+import { useState, useEffect } from 'react'
 
 export default function SettingsPage() {
-  const [darkMode, setDarkMode] = React.useState(false)
-  React.useEffect(() => {
-    const isDark = localStorage.getItem('theme') === 'dark' || 
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    setDarkMode(isDark)
-    document.documentElement.classList.toggle('dark', isDark)
+  const [dark, setDark] = useState(false)
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark')
+    setDark(isDark)
   }, [])
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode
-    setDarkMode(newDarkMode)
-    document.documentElement.classList.toggle('dark', newDarkMode)
-    localStorage.setItem('theme', newDarkMode ? 'dark' : 'light')
+
+  const toggle = () => {
+    const next = !dark
+    setDark(next)
+    document.documentElement.classList.toggle('dark', next)
+    localStorage.setItem('theme', next ? 'dark' : 'light')
   }
+
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-surface-900 p-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-sm p-8">
-          <div className="flex items中心 space-x-3 mb-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-sm p-6">
+          <div className="flex items-center space-x-3 mb-4">
             <Settings className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-            <h2 className="text-xl font-semibold text-surface-900 dark:text-surface-100">设置</h2>
+            <h2 className="text-xl font-semibold text-surface-900 dark:text-surface-100">系统设置</h2>
           </div>
-          <button
-            onClick={toggleDarkMode}
-            className="w-full flex items中心 space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-            <span>{darkMode ? '浅色模式' : '深色模式'}</span>
-          </button>
+          <div className="flex items-center justify-between p-4 rounded-lg bg-surface-50 dark:bg-surface-700">
+            <div>
+              <div className="font-medium text-surface-900 dark:text-surface-100">深色模式</div>
+              <div className="text-sm text-surface-600 dark:text-surface-400">切换界面主题为深色或浅色</div>
+            </div>
+            <button onClick={toggle} className="px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text白 flex items-center space-x-2">
+              {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              <span>{dark ? '浅色模式' : '深色模式'}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

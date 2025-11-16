@@ -37,24 +37,76 @@ const ok = (text: string, origin: string) => new Response(text, {
   }
 })
 
-const b64 = (s: string) => atob(s)
+const b64 = (s: string) => {
+  const bin = atob(s.replace(/\n/g, ''))
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new TextDecoder('utf-8').decode(bytes)
+}
+const cleanOrigin = (v: string) => (v || '').replace(/[`'\"]/g, '').trim()
 
 async function listDocs(env: Env) {
-  const url = `https://api.github.com/repos/${env.REPO_OWNER}/${env.REPO_NAME}/git/trees/${env.BRANCH}?recursive=1`
+  const owner = env.REPO_OWNER || 'njwujinyu'
+  const repo = env.REPO_NAME || 'Online-Document'
+  const branch = env.BRANCH || 'main'
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
   const etagKey = 'etag:tree'
   const prevEtag = await env.DOCS_CACHE.get(etagKey)
-  const r = await fetch(url, { headers: { 'authorization': `Bearer ${env.GITHUB_TOKEN}`, 'accept': 'application/vnd.github+json', ...(prevEtag ? { 'if-none-match': prevEtag } : {}) } })
+  const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
+  headers['user-agent'] = 'online-document-sync'
+  headers['x-github-api-version'] = '2022-11-28'
+  if (env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()) headers['authorization'] = `Bearer ${env.GITHUB_TOKEN}`
+  if (prevEtag) headers['if-none-match'] = prevEtag
+  const r = await fetch(url, { headers })
   if (r.status === 304) return [] as Array<{ path: string; sha: string }>
+  const ct = r.headers.get('content-type') || ''
+  if (!r.ok) {
+    let msg = ''
+    if (ct.includes('application/json')) {
+      const j = await r.json().catch(() => ({})) as { message?: string }
+      msg = j.message || JSON.stringify(j)
+    } else {
+      msg = await r.text().catch(() => '')
+    }
+    throw new Error(`GITHUB_TREE_ERROR:${r.status}:${msg}`)
+  }
+  if (!ct.includes('application/json')) {
+    const txt = await r.text().catch(() => '')
+    throw new Error(`GITHUB_TREE_NON_JSON:${r.status}:${txt}`)
+  }
   const data = await r.json() as { tree?: Array<{ path?: string; type?: string; sha?: string }> }
   const et = r.headers.get('etag')
   if (et) await env.DOCS_CACHE.put(etagKey, et)
-  const items = (data.tree || []).filter((i) => (i.path || '').startsWith(`${env.DOCS_DIR}/`) && i.type === 'blob' && (i.path || '').endsWith('.md'))
+  const docsDir = env.DOCS_DIR || 'docs'
+  const items = (data.tree || []).filter((i) => (i.path || '').startsWith(`${docsDir}/`) && i.type === 'blob' && (i.path || '').endsWith('.md'))
   return items.map((i) => ({ path: String(i.path), sha: String(i.sha) }))
 }
 
 async function fetchDoc(path: string, env: Env) {
-  const url = `https://api.github.com/repos/${env.REPO_OWNER}/${env.REPO_NAME}/contents/${path}?ref=${env.BRANCH}`
-  const r = await fetch(url, { headers: { 'authorization': `Bearer ${env.GITHUB_TOKEN}`, 'accept': 'application/vnd.github+json' } })
+  const owner = env.REPO_OWNER || 'njwujinyu'
+  const repo = env.REPO_NAME || 'Online-Document'
+  const branch = env.BRANCH || 'main'
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
+  const headers: Record<string, string> = { 'accept': 'application/vnd.github+json' }
+  headers['user-agent'] = 'online-document-sync'
+  headers['x-github-api-version'] = '2022-11-28'
+  if (env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()) headers['authorization'] = `Bearer ${env.GITHUB_TOKEN}`
+  const r = await fetch(url, { headers })
+  const ct = r.headers.get('content-type') || ''
+  if (!r.ok) {
+    let msg = ''
+    if (ct.includes('application/json')) {
+      const j = await r.json().catch(() => ({})) as { message?: string }
+      msg = j.message || JSON.stringify(j)
+    } else {
+      msg = await r.text().catch(() => '')
+    }
+    throw new Error(`GITHUB_CONTENT_ERROR:${r.status}:${msg}`)
+  }
+  if (!ct.includes('application/json')) {
+    const txt = await r.text().catch(() => '')
+    throw new Error(`GITHUB_CONTENT_NON_JSON:${r.status}:${txt}`)
+  }
   const data = await r.json()
   if (!data.content) return ''
   return b64(data.content)
@@ -106,9 +158,23 @@ async function sync(env: Env) {
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const originHeader = req.headers.get('origin') || ''
-    const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+    const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
     if (req.method === 'OPTIONS') return ok('', origin)
     const u = new URL(req.url)
+    if (u.pathname === '/status') {
+      const info = {
+        token: !!(env.GITHUB_TOKEN && env.GITHUB_TOKEN.trim()),
+        repoOwner: !!env.REPO_OWNER,
+        repoName: !!env.REPO_NAME,
+        branch: env.BRANCH || 'main',
+        docsDir: env.DOCS_DIR || 'docs',
+        allowedOrigin: !!env.ALLOWED_ORIGIN,
+        adminUser: !!env.ADMIN_USERNAME,
+        hasAdminHash: !!env.ADMIN_PASSWORD_HASH,
+        hasSessionSecret: !!env.SESSION_SECRET
+      }
+      return json({ ok: true, env: info }, origin)
+    }
     if (u.pathname === '/login' && req.method === 'POST') {
       return await login(req, env)
     }
@@ -119,15 +185,27 @@ export default {
       return await logout(req, env)
     }
     if (u.pathname === '/sync') {
-      await sync(env)
-      return ok('ok', origin)
+      try {
+        await sync(env)
+        return ok('ok', origin)
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        return new Response(JSON.stringify({ ok: false, error: msg }), {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+            'access-control-allow-origin': origin,
+            'access-control-allow-credentials': 'true'
+          }
+        })
+      }
     }
     if (u.pathname === '/docs') {
       const data = await env.DOCS_CACHE.get('index')
       return json(data ? JSON.parse(data) : [], origin)
     }
     if (u.pathname.startsWith('/doc/')) {
-      const key = u.pathname.replace('/doc/', '')
+      const key = decodeURIComponent(u.pathname.replace('/doc/', ''))
       const data = await env.DOCS_CACHE.get(key)
       return data ? json({ path: key, content: data }, origin) : new Response('not found', { status: 404 })
     }
@@ -154,7 +232,7 @@ function setCookie(name: string, value: string, days = 7) {
 
 async function login(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const body = await req.json().catch(() => ({})) as { username?: string, password?: string }
   const { username = '', password = '' } = body
   const okPwd = env.ADMIN_PASSWORD_HASH ? bcrypt.compareSync(password, env.ADMIN_PASSWORD_HASH) : false
@@ -175,7 +253,7 @@ async function login(req: Request, env: Env) {
 
 async function session(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const id = getCookie(req, 'session')
   if (!id) return json({ authenticated: false }, origin)
   const s = await env.DOCS_CACHE.get(`session:${id}`)
@@ -184,7 +262,7 @@ async function session(req: Request, env: Env) {
 
 async function logout(req: Request, env: Env) {
   const originHeader = req.headers.get('origin') || ''
-  const origin = originHeader || env.ALLOWED_ORIGIN || '*'
+  const origin = cleanOrigin(originHeader || env.ALLOWED_ORIGIN || '*')
   const id = getCookie(req, 'session')
   if (id) {
     await env.DOCS_CACHE.delete(`session:${id}`)

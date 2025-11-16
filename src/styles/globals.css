@@ -29,9 +29,9 @@
   --color-surface-800: #1e293b;
   --color-surface-900: #0f172a;
   
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  --color成功: #10b981;
+  --color警告: #f59e0b;
+  --color错误: #ef4444;
 
   --color-success-50: #f0fdf4;
   --color-success-100: #dcfce7;
@@ -174,12 +174,12 @@ body.dark {
   color: var(--color-surface-300);
 }
 
-.markdown-content code {
+.markdown-content :not(pre) > code {
   @apply px-1 py-0.5 rounded text-sm;
   background-color: var(--color-surface-200);
 }
 
-.dark .markdown-content code {
+.dark .markdown-content :not(pre) > code {
   background-color: var(--color-surface-700);
 }
 

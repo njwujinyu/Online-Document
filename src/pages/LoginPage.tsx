@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC = ()位 {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 dark:from-surface-900 dark:to-surface-800 p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-xl p-8">
+        <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-xl p-8">
           <div className="text中心 mb-8">
             <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <LogIn className="w-8 h-8 text白" />
@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-error/10 border border-error/20 rounded-lg p-3">
+              <div className="bg错误/10 border border错误/20 rounded-lg p-3">
                 <p className="text错误 text-sm">{error}</p>
               </div>
             )}
@@ -102,7 +102,7 @@ const LoginPage: React.FC = () => {
             >
               {isLoading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border白 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border白 border-t透明 rounded-full animate-spin" />
                   <span>登录中...</span>
                 </>
               ) : (
