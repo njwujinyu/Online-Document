@@ -7,8 +7,8 @@ import { FileText } from 'lucide-react'
 export default function MyDocsPage() {
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-sm p-8">
-        <div className="text中心">
+      <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-sm p-8">
+        <div className="text-center">
           <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <FileText className="w-8 h-8 text-primary-600 dark:text-primary-400" />
           </div>
