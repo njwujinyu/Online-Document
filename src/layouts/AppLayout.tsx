@@ -126,11 +126,11 @@ const AppLayout: React.FC = () => {
       </div>
 
       {sidebarOpen && (
-        <div className="fixed inset-0 bg黑/40 md:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
-        <header className="bg白 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
-          <div className="flex items-center justify之间">
+        <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
@@ -147,7 +147,7 @@ const AppLayout: React.FC = () => {
             </div>
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
-                <span className="text白 font-semibold">{user?.username?.charAt(0).toUpperCase()}</span>
+                <span className="text-white font-semibold">{user?.username?.charAt(0).toUpperCase()}</span>
               </div>
             </div>
           </div>

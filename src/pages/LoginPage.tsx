@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 
-const LoginPage: React.FC = ()位 {
+const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -27,10 +27,10 @@ const LoginPage: React.FC = ()位 {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 dark:from-surface-900 dark:to-surface-800 p-4">
       <div className="w-full max-w-md">
-        <div className="bg白 dark:bg-surface-800 rounded-2xl shadow-xl p-8">
-          <div className="text中心 mb-8">
+        <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-xl p-8">
+          <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <LogIn className="w-8 h-8 text白" />
+              <LogIn className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-surface-900 dark:text-surface-100 mb-2">
               私有文档系统
@@ -42,8 +42,8 @@ const LoginPage: React.FC = ()位 {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg错误/10 border border错误/20 rounded-lg p-3">
-                <p className="text错误 text-sm">{error}</p>
+              <div className="bg-error/10 border border-error/20 rounded-lg p-3">
+                <p className="text-error text-sm">{error}</p>
               </div>
             )}
 
@@ -57,7 +57,7 @@ const LoginPage: React.FC = ()位 {
                 autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-surface-300 dark:border-surface-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg白 dark:bg-surface-700 text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400"
+                className="w-full px-4 py-3 border border-surface-300 dark:border-surface-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-surface-700 text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400"
                 placeholder="请输入用户名"
                 disabled={isLoading}
                 required
@@ -75,7 +75,7 @@ const LoginPage: React.FC = ()位 {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-surface-300 dark:border-surface-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg白 dark:bg-surface-700 text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400 pr-12"
+                  className="w-full px-4 py-3 border border-surface-300 dark:border-surface-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-surface-700 text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400 pr-12"
                   placeholder="请输入密码"
                   disabled={isLoading}
                   required
@@ -98,11 +98,11 @@ const LoginPage: React.FC = ()位 {
             <button
               type="submit"
               disabled={isLoading || !username || !password}
-              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text白 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               {isLoading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border白 border-t透明 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>登录中...</span>
                 </>
               ) : (
@@ -115,7 +115,7 @@ const LoginPage: React.FC = ()位 {
           </form>
 
           <div className="mt-6 p-4 bg-surface-50 dark:bg-surface-700 rounded-lg">
-            <p className="text-sm text-surface-600 dark:text-surface-400 text中心">
+            <p className="text-sm text-surface-600 dark:text-surface-400 text-center">
               测试账号: <strong>admin</strong> / <strong>password</strong>
             </p>
           </div>
