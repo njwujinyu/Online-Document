@@ -4,7 +4,7 @@
 */
 import React from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { LogOut, Menu, Folder, FileText, Search, Moon, Sun, ArrowLeft } from 'lucide-react'
+import { LogOut, Menu, Folder, FileText, Search, Moon, Sun } from 'lucide-react'
 import { getDocs } from '@/utils/api'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -38,9 +38,7 @@ const AppLayout: React.FC = () => {
     localStorage.setItem('theme', v ? 'dark' : 'light')
   }
 
-  const goBack = () => {
-    navigate(-1)
-  }
+  
 
   const handleLogout = () => {
     logout()
@@ -53,12 +51,12 @@ const AppLayout: React.FC = () => {
           {sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         } $
           {sidebarOpen ? 'w-64' : 'w-0 md:w-20'}
-        } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
+        } fixed md:static inset-y-0 left-0 z-40 bg白 dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
       >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
           <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
             {sidebarOpen && (
-              <h1 className="text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
+              <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             )}
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
               <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
@@ -114,7 +112,7 @@ const AppLayout: React.FC = () => {
         </nav>
 
         <div className="p-4 border-t border-surface-200 dark:border-surface-700 space-y-4">
-          <button onClick={toggleDarkMode} className="w-full flex items中心 space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+          <button onClick={toggleDarkMode} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             {sidebarOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
           </button>
@@ -129,15 +127,13 @@ const AppLayout: React.FC = () => {
         <div className="fixed inset-0 bg-black/40 md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
-        <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
+        <header className="bg白 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
-              <button onClick={goBack} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
-                <ArrowLeft className="w-5 h-5 text-surface-600 dark:text-surface-400" />
-              </button>
+              
               <div>
                 <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-100">
                   {location.pathname === '/' ? '仪表盘' : location.pathname === '/docs' ? '文档库' : location.pathname === '/me' ? '我的文档' : '页面'}
@@ -147,7 +143,7 @@ const AppLayout: React.FC = () => {
             </div>
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold">{user?.username?.charAt(0).toUpperCase()}</span>
+                <span className="text白 font-semibold">{user?.username?.charAt(0).toUpperCase()}</span>
               </div>
             </div>
           </div>
