@@ -22,7 +22,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       <div className="max-w-4xl mx-auto">
-        <div className="bg白色 dark:bg-surface-800 rounded-2xl shadow-sm p-8">
+        <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-sm p-8">
               <div className="text-center">
                 <div className="w-20 h-20 bg-primary-100 dark:bg-primary-900/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <FileText className="w-10 h-10 text-primary-600 dark:text-primary-400" />
@@ -59,7 +59,7 @@ const DashboardPage: React.FC = () => {
                   </button>
 
                   <div className="text-center p-6 bg-surface-50 dark:bg-surface-700 rounded-xl">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items中心 justify-center mx-auto mb-4">
+                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                       <Search className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <h4 className="font-semibold text-surface-900 dark:text-surface-100 mb-2">
