@@ -71,12 +71,12 @@ const AppLayout: React.FC = () => {
         } fixed lg:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 ease-in-out flex flex-col overflow-hidden ${sidebarOpen ? 'desktop-expanded' : 'desktop-collapsed is-collapsed'} ${sidebarOpen ? '' : 'pointer-events-none lg:pointer-events-auto'}`}
         data-state={sidebarOpen ? 'expanded' : 'collapsed'}
       >
-        <div className="p-4 border-b border-surface-200 dark:border-surface-700">
+        <div className={`${sidebarOpen ? 'p-4' : 'p-0'} border-b border-surface-200 dark:border-surface-700`}>
           <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
             {sidebarOpen && (
               <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             )}
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} aria-expanded={sidebarOpen} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} aria-expanded={sidebarOpen} className={`${sidebarOpen ? 'p-2' : 'p-1'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700`}>
               <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
             </button>
           </div>
