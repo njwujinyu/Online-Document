@@ -31,11 +31,11 @@
 
 2. 配置 Workers 环境变量（生产）
    - 在 Cloudflare Dashboard 的 Workers 设置中添加以下变量：
-     - `REPO_OWNER`：Github 仓库所有者（例如 `demo-owner`）
-     - `REPO_NAME`：仓库名（例如 `demo-repo`）
+    - `REPO_OWNER`：Github 仓库所有者（例如 `demo-owner`）
+    - `REPO_NAME`：仓库名（例如 `demo-repo`）
      - `DOCS_DIR`：文档根目录（默认 `docs`）
      - `BRANCH`：文档分支（默认 `main`）
-     - `ALLOWED_ORIGIN`：允许的前端来源（例如 `https://demo.pages.dev` 或你的自定义域）
+    - `ALLOWED_ORIGIN`：允许的前端来源（例如 `https://demo.pages.dev` 或你的自定义域）
      - `ADMIN_USERNAME`：管理员用户名（例如 `admin`）
      - `ADMIN_PASSWORD_HASH`：管理员密码的 bcrypt 哈希
      - `SESSION_SECRET`：用于会话签名的随机字符串
@@ -87,10 +87,6 @@
 ## 安全建议
 - `ADMIN_PASSWORD_HASH` 与 `SESSION_SECRET` 必须在生产环境变量中设置，不要提交到仓库。
 - 若需要访问私有仓库，使用 `GITHUB_TOKEN` 并开启最小必要权限；切勿在前端暴露。
-
-## 开发与维护
-- 开发在本地仓库进行，遵循官方文档与本文档规范；完成后更新本地文档并推送。
-- 不在 `C:/D:` 安装依赖与生成临时文件；统一使用项目根目录或 `E:` 盘。
 
 ---
 
