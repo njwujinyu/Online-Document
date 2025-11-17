@@ -12,7 +12,8 @@ const AppLayout: React.FC = () => {
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
   const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = React.useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1024 : true))
+  const [desktopOpen, setDesktopOpen] = React.useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1024 : true))
+  const [mobileOpen, setMobileOpen] = React.useState(false)
   const [darkMode, setDarkMode] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
   const [docs, setDocs] = React.useState<Array<{ path: string; title: string; summary?: string; tags?: string[] }>>([])
@@ -40,14 +41,18 @@ const AppLayout: React.FC = () => {
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      setSidebarOpen(false)
+      setMobileOpen(false)
     }
   }, [location.pathname, darkMode])
 
   React.useEffect(() => {
     const onResize = () => {
-      const v = window.innerWidth >= 1024
-      if (!v) setSidebarOpen(false)
+      const isDesktop = window.innerWidth >= 1024
+      if (!isDesktop) {
+        setDesktopOpen(false)
+      } else {
+        setMobileOpen(false)
+      }
     }
     window.addEventListener('resize', onResize)
     return () => {
@@ -63,29 +68,22 @@ const AppLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-surface-100 dark:bg-surface-900">
-      <div
-        className={`${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }} ${
-          sidebarOpen ? 'w-64' : 'w-0 lg:w-12'
-        } fixed lg:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 ease-in-out flex flex-col overflow-hidden ${sidebarOpen ? 'desktop-expanded' : 'desktop-collapsed is-collapsed'} ${sidebarOpen ? '' : 'pointer-events-none lg:pointer-events-auto'}`}
-        data-state={sidebarOpen ? 'expanded' : 'collapsed'}
-      >
-        <div className={`${sidebarOpen ? 'p-4' : 'p-0'} border-b border-surface-200 dark:border-surface-700`}>
-          <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
-            {sidebarOpen && (
+      <div className={`hidden lg:flex ${desktopOpen ? 'w-64' : 'w-12'} inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 ease-in-out flex-col overflow-hidden`} data-state={desktopOpen ? 'expanded' : 'collapsed'}>
+        <div className={`${desktopOpen ? 'p-4' : 'p-0'} border-b border-surface-200 dark:border-surface-700`}>
+          <div className={`flex items-center ${desktopOpen ? 'justify-between' : 'justify-center'}`}>
+            {desktopOpen && (
               <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             )}
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} aria-expanded={sidebarOpen} className={`${sidebarOpen ? 'p-2' : 'p-1'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700`}>
+            <button onClick={() => setDesktopOpen(!desktopOpen)} aria-expanded={desktopOpen} className={`${desktopOpen ? 'p-2' : 'p-1'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700`}>
               <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
             </button>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto flex flex-col">
           <div className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700">
             <Search className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-            {sidebarOpen && (
+            {desktopOpen && (
               <input
                 value={searchQuery}
                 onChange={(e) => {
@@ -101,7 +99,7 @@ const AppLayout: React.FC = () => {
 
           <button onClick={() => navigate('/docs')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400">
             <Folder className="w-5 h-5" />
-            {sidebarOpen && <span>文档库</span>}
+            {desktopOpen && <span>文档库</span>}
           </button>
 
           <div className="space-y-1">
@@ -118,37 +116,104 @@ const AppLayout: React.FC = () => {
               .map(it => (
                 <button key={it.path} onClick={() => navigate(`/docs?p=${encodeURIComponent(it.path)}`)} className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
                   <FileText className="w-4 h-4" />
-                  {sidebarOpen && <span className="truncate">{it.title}</span>}
+                  {desktopOpen && <span className="truncate">{it.title}</span>}
                 </button>
               ))}
           </div>
 
           <button onClick={() => navigate('/me')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             <FileText className="w-5 h-5" />
-            {sidebarOpen && <span>我的文档</span>}
+            {desktopOpen && <span>我的文档</span>}
           </button>
         </nav>
 
         <div className="p-4 border-t border-surface-200 dark:border-surface-700 space-y-4">
           <button onClick={toggleDarkMode} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            {sidebarOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
+            {desktopOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
           </button>
           <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500">
             <LogOut className="w-5 h-5" />
-            {sidebarOpen && <span>退出登录</span>}
+            {desktopOpen && <span>退出登录</span>}
           </button>
         </div>
       </div>
 
-      {sidebarOpen && (
-        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setSidebarOpen(false)} />
+      <div className={`${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden fixed inset-y-0 left-0 w-64 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-transform duration-300 ease-in-out flex flex-col`} data-state={mobileOpen ? 'expanded' : 'collapsed'}>
+        <div className="p-4 border-b border-surface-200 dark:border-surface-700">
+          <div className="flex items-center justify-between">
+            <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
+            <button onClick={() => setMobileOpen(false)} aria-expanded={mobileOpen} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+              <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
+            </button>
+          </div>
+        </div>
+
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          <div className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700">
+            <Search className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+            <input
+              value={searchQuery}
+              onChange={(e) => {
+                const q = e.target.value
+                setSearchQuery(q)
+                navigate(`/docs?q=${encodeURIComponent(q)}`)
+              }}
+              className="flex-1 h-8 px-2 bg-transparent text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400 focus:outline-none focus:ring-0"
+              placeholder="搜索"
+            />
+          </div>
+
+          <button onClick={() => navigate('/docs')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400">
+            <Folder className="w-5 h-5" />
+            <span>文档库</span>
+          </button>
+
+          <div className="space-y-1">
+            {docs
+              .filter(it => {
+                const q = searchQuery.trim().toLowerCase()
+                if (!q) return true
+                const inTitle = (it.title || '').toLowerCase().includes(q)
+                const inPath = (it.path || '').toLowerCase().includes(q)
+                const inSummary = (it.summary || '').toLowerCase().includes(q)
+                const inTags = (it.tags || []).some(t => t.toLowerCase().includes(q))
+                return inTitle || inPath || inSummary || inTags
+              })
+              .map(it => (
+                <button key={it.path} onClick={() => navigate(`/docs?p=${encodeURIComponent(it.path)}`)} className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+                  <FileText className="w-4 h-4" />
+                  <span className="truncate">{it.title}</span>
+                </button>
+              ))}
+          </div>
+
+          <button onClick={() => navigate('/me')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+            <FileText className="w-5 h-5" />
+            <span>我的文档</span>
+          </button>
+        </nav>
+
+        <div className="p-4 border-t border-surface-200 dark:border-surface-700 space-y-4">
+          <button onClick={toggleDarkMode} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            <span>{darkMode ? '浅色模式' : '深色模式'}</span>
+          </button>
+          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-surface-500">
+            <LogOut className="w-5 h-5" />
+            <span>退出登录</span>
+          </button>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+              <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
               
