@@ -26,7 +26,7 @@
 ## Cloudflare Workers 部署
 1. 创建 KV 命名空间（DOCS_CACHE）
    - 方式 A（Cloudflare Dashboard）：创建 KV 并记录 `id`。
-   - 方式 B（Wrangler CLI）：使用 `wrangler kv:namespace create DOCS_CACHE`（需本地已登录 Cloudflare）。
+   - 方式 B（Wrangler CLI）：使用 `wrangler kv:namespace create DOCS_CACHE`。
    - 将 KV `id` 填入 `wrangler.toml` 的 `[[kv_namespaces]]` 对应条目。
 
 2. 配置 Workers 环境变量（生产）
@@ -39,11 +39,11 @@
      - `ADMIN_USERNAME`：管理员用户名（例如 `admin`）
      - `ADMIN_PASSWORD_HASH`：管理员密码的 bcrypt 哈希
      - `SESSION_SECRET`：用于会话签名的随机字符串
-   - 哈希生成示例（Node 环境）：
+   - 哈希生成示例：
      - `node -e "console.log(require('bcryptjs').hashSync('你的强密码', 10))"`
 
 3. 部署 Workers
-   - 本地（Windows 10，仓库在 `E:` 或项目根目录，不在 `C:/D:`）执行：
+   - 在项目根目录执行：
      - `npm run cf:deploy`
    - 成功后将获得 Workers 的外网地址，例如：
      - `https://demo-worker.<你的子域>.workers.dev`
@@ -76,7 +76,6 @@
 
 ## Github 文档仓库要求
 - 所有 Markdown 文档必须使用 UTF-8（无 BOM）编码。
-- 建议通过 VS Code 或 Notepad++ 进行编码转换与校验。
 - 文档存放目录与分支由 `DOCS_DIR` 与 `BRANCH` 指定。
 
 ## 常见问题
