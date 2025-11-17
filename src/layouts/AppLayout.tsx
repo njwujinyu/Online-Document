@@ -12,7 +12,7 @@ const AppLayout: React.FC = () => {
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
   const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = React.useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
+  const [sidebarOpen, setSidebarOpen] = React.useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 1024 : true))
   const [darkMode, setDarkMode] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
   const [docs, setDocs] = React.useState<Array<{ path: string; title: string; summary?: string; tags?: string[] }>>([])
@@ -39,10 +39,21 @@ const AppLayout: React.FC = () => {
   }
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setSidebarOpen(false)
     }
   }, [location.pathname, darkMode])
+
+  React.useEffect(() => {
+    const onResize = () => {
+      const v = window.innerWidth >= 1024
+      if (!v) setSidebarOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
 
   
 
@@ -54,17 +65,18 @@ const AppLayout: React.FC = () => {
     <div className="flex h-screen bg-surface-100 dark:bg-surface-900">
       <div
         className={`${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }} ${
-          sidebarOpen ? 'w-64' : 'w-0 md:w-20'
-        } fixed md:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 flex flex-col overflow-hidden ${sidebarOpen ? '' : 'pointer-events-none md:pointer-events-auto'}`}
+          sidebarOpen ? 'w-64' : 'w-0 lg:w-12'
+        } fixed lg:static inset-y-0 left-0 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 ease-in-out flex flex-col overflow-hidden ${sidebarOpen ? 'desktop-expanded' : 'desktop-collapsed is-collapsed'} ${sidebarOpen ? '' : 'pointer-events-none lg:pointer-events-auto'}`}
+        data-state={sidebarOpen ? 'expanded' : 'collapsed'}
       >
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
           <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
             {sidebarOpen && (
               <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             )}
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} aria-expanded={sidebarOpen} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
               <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
             </button>
           </div>
@@ -111,7 +123,7 @@ const AppLayout: React.FC = () => {
               ))}
           </div>
 
-          <button onClick={() => navigate('/me')} className="w-full flex items中心 space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+          <button onClick={() => navigate('/me')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
             <FileText className="w-5 h-5" />
             {sidebarOpen && <span>我的文档</span>}
           </button>
@@ -130,13 +142,13 @@ const AppLayout: React.FC = () => {
       </div>
 
       {sidebarOpen && (
-        <div className="fixed inset-0 bg-black/40 z-30 md:hidden" aria-hidden onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setSidebarOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
-        <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
+        <header className="bg白 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
                 <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
               </button>
               
