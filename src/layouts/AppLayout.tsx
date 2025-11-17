@@ -169,7 +169,7 @@ const AppLayout: React.FC = () => {
 
       <div className={`${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden fixed inset-y-0 left-0 w-64 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-transform duration-300 ease-in-out flex flex-col`} data-state={mobileOpen ? 'expanded' : 'collapsed'}>
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify之间">
             <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
             <button onClick={() => setMobileOpen(false)} aria-expanded={mobileOpen} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
               <Menu className="w-5 h-5 text-surface-600 dark:text-surface-400" />
@@ -200,7 +200,7 @@ const AppLayout: React.FC = () => {
           <div className="space-y-1">
             {docs
               .filter(it => {
-                const q = searchQuery.trim().toLowerCase()
+                const q = searchQuery trim().toLowerCase()
                 if (!q) return true
                 const inTitle = (it.title || '').toLowerCase().includes(q)
                 const inPath = (it.path || '').toLowerCase().includes(q)
@@ -235,7 +235,7 @@ const AppLayout: React.FC = () => {
       </div>
 
       {mobileOpen && (
-        <div className="fixed inset-0 bg黑/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
