@@ -145,7 +145,7 @@ const AppLayout: React.FC = () => {
         <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setSidebarOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
-        <header className="bg白 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
+        <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
