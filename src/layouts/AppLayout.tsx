@@ -80,7 +80,7 @@ const AppLayout: React.FC = () => {
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto flex flex-col">
+        <nav className={`flex-1 ${desktopOpen ? 'p-4 space-y-2' : 'p-2 space-y-1'} overflow-y-auto flex flex-col`}>
           <div className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700">
             <Search className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             {desktopOpen && (
@@ -97,7 +97,7 @@ const AppLayout: React.FC = () => {
             )}
           </div>
 
-          <button onClick={() => navigate('/docs')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400">
+          <button onClick={() => navigate('/docs')} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-3' : 'justify-center p-2'} rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400`}>
             <Folder className="w-5 h-5" />
             {desktopOpen && <span>文档库</span>}
           </button>
@@ -114,25 +114,25 @@ const AppLayout: React.FC = () => {
                 return inTitle || inPath || inSummary || inTags
               })
               .map(it => (
-                <button key={it.path} onClick={() => navigate(`/docs?p=${encodeURIComponent(it.path)}`)} className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+                <button key={it.path} onClick={() => navigate(`/docs?p=${encodeURIComponent(it.path)}`)} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-2' : 'justify-center p-2'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400`}>
                   <FileText className="w-4 h-4" />
                   {desktopOpen && <span className="truncate">{it.title}</span>}
                 </button>
               ))}
           </div>
 
-          <button onClick={() => navigate('/me')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+          <button onClick={() => navigate('/me')} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-3' : 'justify-center p-2'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400`}>
             <FileText className="w-5 h-5" />
             {desktopOpen && <span>我的文档</span>}
           </button>
         </nav>
 
-        <div className="p-4 border-t border-surface-200 dark:border-surface-700 space-y-4">
-          <button onClick={toggleDarkMode} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400">
+        <div className={`${desktopOpen ? 'p-4' : 'p-2'} border-t border-surface-200 dark:border-surface-700 ${desktopOpen ? 'space-y-4' : 'space-y-2'}`}> 
+          <button onClick={toggleDarkMode} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-3' : 'justify-center p-2'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400`}>
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             {desktopOpen && <span>{darkMode ? '浅色模式' : '深色模式'}</span>}
           </button>
-          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500">
+          <button onClick={handleLogout} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-3' : 'justify-center p-2'} rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500`}>
             <LogOut className="w-5 h-5" />
             {desktopOpen && <span>退出登录</span>}
           </button>
@@ -199,7 +199,7 @@ const AppLayout: React.FC = () => {
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             <span>{darkMode ? '浅色模式' : '深色模式'}</span>
           </button>
-          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-surface-500">
+          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500">
             <LogOut className="w-5 h-5" />
             <span>退出登录</span>
           </button>
