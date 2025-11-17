@@ -17,6 +17,7 @@ const AppLayout: React.FC = () => {
   const [darkMode, setDarkMode] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
   const [docs, setDocs] = React.useState<Array<{ path: string; title: string; summary?: string; tags?: string[] }>>([])
+  const desktopSearchRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
     const isDark = localStorage.getItem('theme') === 'dark' || 
@@ -81,7 +82,31 @@ const AppLayout: React.FC = () => {
         </div>
 
         <nav className={`flex-1 ${desktopOpen ? 'p-4 space-y-2' : 'p-2 space-y-1'} overflow-y-auto flex flex-col`}>
-          <div className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700">
+          <div
+            className="flex items-center space-x-3 h-12 px-3 rounded-lg border border-surface-200 dark:border-surface-600 bg-surface-50 dark:bg-surface-700 cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              if (!desktopOpen) {
+                setDesktopOpen(true)
+                setTimeout(() => desktopSearchRef.current?.focus(), 0)
+              } else {
+                desktopSearchRef.current?.focus()
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                if (!desktopOpen) {
+                  setDesktopOpen(true)
+                  setTimeout(() => desktopSearchRef.current?.focus(), 0)
+                } else {
+                  desktopSearchRef.current?.focus()
+                }
+              }
+            }}
+            title="搜索"
+          >
             <Search className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             {desktopOpen && (
               <input
@@ -93,6 +118,7 @@ const AppLayout: React.FC = () => {
                 }}
                 className="flex-1 h-8 px-2 bg-transparent text-surface-900 dark:text-surface-100 placeholder-surface-500 dark:placeholder-surface-400 focus:outline-none focus:ring-0"
                 placeholder="搜索"
+                ref={desktopSearchRef}
               />
             )}
           </div>
@@ -103,8 +129,8 @@ const AppLayout: React.FC = () => {
           </button>
 
           <div className="space-y-1">
-            {docs
-              .filter(it => {
+            {(() => {
+              const filtered = docs.filter(it => {
                 const q = searchQuery.trim().toLowerCase()
                 if (!q) return true
                 const inTitle = (it.title || '').toLowerCase().includes(q)
@@ -113,12 +139,14 @@ const AppLayout: React.FC = () => {
                 const inTags = (it.tags || []).some(t => t.toLowerCase().includes(q))
                 return inTitle || inPath || inSummary || inTags
               })
-              .map(it => (
+              const list = desktopOpen ? filtered : filtered.slice(0, 8)
+              return list.map(it => (
                 <button key={it.path} onClick={() => navigate(`/docs?p=${encodeURIComponent(it.path)}`)} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-2' : 'justify-center p-2'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400`}>
                   <FileText className="w-4 h-4" />
                   {desktopOpen && <span className="truncate">{it.title}</span>}
                 </button>
-              ))}
+              ))
+            })()}
           </div>
 
           <button onClick={() => navigate('/me')} className={`w-full flex items-center ${desktopOpen ? 'space-x-3 justify-start p-3' : 'justify-center p-2'} rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 text-surface-600 dark:text-surface-400`}>
@@ -207,7 +235,7 @@ const AppLayout: React.FC = () => {
       </div>
 
       {mobileOpen && (
-        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 bg黑/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
