@@ -1,11 +1,11 @@
 # 私有文档系统部署指南（Cloudflare）
 
-本项目是基于 React + Vite + Tailwind 的前端，以及 Cloudflare Workers + KV + Pages Functions 的后端代理，整合 Github 私有仓库文档同步的私有文档系统。本文档提供完整的 Cloudflare 部署教程，并说明关键环境变量与安全要求。
+本项目是基于 React + Vite + Tailwind 的前端，以及 Cloudflare Workers + KV + Pages Functions 的后端代理，整合 Github 私有仓库文档同步的私有文档系统。本文档提供完整的 Cloudflare 部署教程，并说明关键环境变量与安全要求。为保护隐私，文档仅使用 demo 占位符，不包含任何实际账号或仓库信息。
 
 ## 架构概览
 - 前端：Cloudflare Pages（构建并托管静态资源），通过 Pages Functions 代理后端接口到 Workers。
 - 后端：Cloudflare Workers；KV 用于缓存文档索引与会话；Cron 任务定期同步 Github 文档。
-- 文档仓库：Github 私有仓库（例如 `wepo-Document`），分支与目录通过环境变量指定。
+- 文档仓库：Github 私有仓库（如 `demo-owner/demo-repo`），分支与目录通过环境变量指定。
 
 ## 前置条件
 - 一个 Cloudflare 账号，已启用 Pages 与 Workers。
@@ -31,11 +31,11 @@
 
 2. 配置 Workers 环境变量（生产）
    - 在 Cloudflare Dashboard 的 Workers 设置中添加以下变量：
-     - `REPO_OWNER`：Github 仓库所有者（例如 `njwujinyu`）
-     - `REPO_NAME`：仓库名（例如 `wepo-Document`）
+     - `REPO_OWNER`：Github 仓库所有者（例如 `demo-owner`）
+     - `REPO_NAME`：仓库名（例如 `demo-repo`）
      - `DOCS_DIR`：文档根目录（默认 `docs`）
      - `BRANCH`：文档分支（默认 `main`）
-     - `ALLOWED_ORIGIN`：允许的前端来源（例如 `https://online-document.pages.dev` 或你的自定义域）
+     - `ALLOWED_ORIGIN`：允许的前端来源（例如 `https://demo.pages.dev` 或你的自定义域）
      - `ADMIN_USERNAME`：管理员用户名（例如 `admin`）
      - `ADMIN_PASSWORD_HASH`：管理员密码的 bcrypt 哈希
      - `SESSION_SECRET`：用于会话签名的随机字符串
@@ -46,7 +46,7 @@
    - 本地（Windows 10，仓库在 `E:` 或项目根目录，不在 `C:/D:`）执行：
      - `npm run cf:deploy`
    - 成功后将获得 Workers 的外网地址，例如：
-     - `https://online-document-sync.<你的子域>.workers.dev`
+     - `https://demo-worker.<你的子域>.workers.dev`
 
 4. 定时同步（可选）
    - `wrangler.toml` 中已配置示例 Cron（每 2 小时一次）。确保账号启用 Cron 触发器。
@@ -59,7 +59,7 @@
 
 ## Cloudflare Pages 部署
 1. 连接 Github 仓库
-   - 在 Cloudflare Pages 选择 `njwujinyu/Online-Document`（或你的仓库），默认构建分支可选 `main` 或 `deploy/pages`。
+   - 在 Cloudflare Pages 选择 `demo-owner/demo-repo`（或你的仓库），默认构建分支可选 `main` 或 `deploy/pages`。
    - 构建设置：
      - 构建命令：`npm run build`
      - 产物目录：`dist`
@@ -67,7 +67,7 @@
 2. Pages Functions 代理到 Workers
    - 项目已包含 `functions/api/[[path]].ts`，会将 `/api` 下的请求代理到 Workers。
    - 在 Pages 项目环境变量中设置：
-     - `WORKER_BASE_URL`：你的 Workers 外网地址（例如 `https://online-document-sync.<你的子域>.workers.dev`）
+     - `WORKER_BASE_URL`：你的 Workers 外网地址（例如 `https://demo-worker.<你的子域>.workers.dev`）
    - 前端默认使用 `'/api'` 作为后端基座，因此无需设置 `VITE_WORKER_BASE_URL`；生产环境将通过 Functions 完成代理。
 
 3. CORS 与会话
