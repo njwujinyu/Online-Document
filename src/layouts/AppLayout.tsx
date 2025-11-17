@@ -167,7 +167,7 @@ const AppLayout: React.FC = () => {
         </div>
       </div>
 
-      <div className={`${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden fixed inset-y-0 left-0 w-64 z-40 bg白 dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-transform duration-300 ease-in-out flex flex-col`} data-state={mobileOpen ? 'expanded' : 'collapsed'}>
+      <div className={`${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden fixed inset-y-0 left-0 w-64 z-40 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-transform duration-300 ease-in-out flex flex-col`} data-state={mobileOpen ? 'expanded' : 'collapsed'}>
         <div className="p-4 border-b border-surface-200 dark:border-surface-700">
           <div className="flex items-center justify-between">
             <h1 onClick={() => navigate('/')} className="cursor-pointer text-xl font-semibold text-surface-900 dark:text-surface-100">文档系统</h1>
@@ -192,7 +192,7 @@ const AppLayout: React.FC = () => {
             />
           </div>
 
-          <button onClick={() => navigate('/docs')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-primary-50 dark:hoverbg-primary-900/20 text-primary-600 dark:text-primary-400">
+          <button onClick={() => navigate('/docs')} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400">
             <Folder className="w-5 h-5" />
             <span>文档库</span>
           </button>
@@ -227,7 +227,7 @@ const AppLayout: React.FC = () => {
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             <span>{darkMode ? '浅色模式' : '深色模式'}</span>
           </button>
-          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-error-500">
+          <button onClick={handleLogout} className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-error-500/10 dark:hover:bg-error-500/10 text-error-600 dark:text-surface-400">
             <LogOut className="w-5 h-5" />
             <span>退出登录</span>
           </button>
@@ -235,7 +235,7 @@ const AppLayout: React.FC = () => {
       </div>
 
       {mobileOpen && (
-        <div className="fixed inset-0 bg黑/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" aria-hidden onClick={() => setMobileOpen(false)} />
       )}
       <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700 p-4">
