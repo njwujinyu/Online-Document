@@ -186,6 +186,7 @@ body {
 .markdown-content pre {
   @apply p-4 rounded-lg my-4 overflow-x-auto;
   background-color: var(--color-surface-100);
+  max-width: 100%;
 }
 
 .dark .markdown-content pre {
@@ -223,6 +224,32 @@ input[type="password"]::-ms-clear {
 /* 统一关闭默认外观以减少不同浏览器的装饰差异 */
 input[type="password"] {
   appearance: none;
+}
+
+.markdown-content img,
+.markdown-content video {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+.flex > .flex-1 {
+  min-width: 0;
+}
+
+.lg\:hidden.fixed[data-state="expanded"] {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 a:focus, button:focus, input:focus, textarea:focus, select:focus { outline: none; }
